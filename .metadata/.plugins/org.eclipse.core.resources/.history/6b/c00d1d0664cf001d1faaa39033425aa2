@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="board"> 
+ <select id="count" resultType="int">
+ 	<!-- id 값을 count를 호출해주는 Dao 메소드와 이름을 같게 해줘야 작업이 편함 -->
+ 	SELECT count(*) FROM board <!-- 현재 테이블에 저장되어 있는 전체 레코드 수 리턴 -->
+ </select>
+ 
+ <resultMap type="board.dto.BoardDTO" id="listSelect" autoMapping="true">
+ 	<association property="membersDTO" javaType="members.dto.MembersDTO">
+ 		<result column="memberName" property="memberName"/>
+ 	</association>
+ </resultMap>
+ 
+ <select id="list" parameterType="board.dto.PageDTO" resultMap="listSelect">
+	<![CDATA[ 
+ 	SELECT b.*
+		FROM(SELECT rownum AS rm , a.*
+	 	 FROM(SELECT b.*, m.memberName
+	  		  FROM board b, members m
+	  		  WHERE b.memberEmail = m.memberEmail(+)	  
+         	  ORDER BY ref DESC, re_step ASC)a)b
+	  WHERE b.rm >= #{startRow} AND b.rm <= #{endRow}
+	]]>
+ </select>
+
+           <!-- BoardDaoImp에 있는 메소드명과 id명을 같게 해야한다. -->
+<insert id="save" parameterType="board.dto.BoardDTO">
+	INSERT INTO board(num, subject, reg_date, readcount, ref, re_step, re_level, content, ip, upload, memberEmail)
+	VALUES(board_num_seq.nextval, #{subject}, sysdate, 0,
+	<choose>
+	         <!-- ref==0이면, 제목글 -->
+		<when test="ref==0">
+		 board_num_seq.nextval,
+		</when>
+		<otherwise>
+		 #{ref}, 
+		</otherwise>
+	</choose>
+	 #{re_step}, #{re_level}, #{content, jdbcType=VARCHAR}, #{ip}, #{upload, jdbcType=VARCHAR}, #{memberEmail, jdbcType=VARCHAR}
+	)
+</insert>
+
+ <!-- 조회수 증가 -->
+ <update id="readCount" parameterType="int">
+	UPDATE board
+	SET readCount = readCount + 1
+	WHERE num=#{num}
+ </update>
+
+ <!-- 아래 content 쿼리문의 결과값을 받아서 처리 -->
+ <resultMap type="board.dto.BoardDTO" id="contentSelect" autoMapping="true">
+	<association property="membersDTO" javaType="members.dto.MembersDTO">
+		<result column="memberName" property="memberName"/>
+	</association>
+ </resultMap>
+
+
+ <select id="content" parameterType="int" resultMap="contentSelect">
+	SELECT b.*, m.memberName
+	FROM board b, members m
+	WHERE b.memberEmail = m.memberEmail(+) <!-- memberEmail 값이 없어도 가져옴 -->
+    AND num=#{num}                 	
+ </select>
+ 
+ <!-- re_step 값 증가 -->
+ <update id="reStepCount" parameterType="board.dto.BoardDTO">
+ 	UPDATE board
+ 	SET re_step = re_step + 1 <!-- '=' 할당 -->
+ 	WHERE ref=#{ref} AND re_step > #{re_step} <!-- '=' 비교 -->
+ </update>
+
+ <!-- 글 수정 -->
+ <update id="update" parameterType="board.dto.BoardDTO">
+ 	UPDATE board
+ 	SET subject=#{subject}, content=#{content}
+ 	<if test="upload!=null">
+ 		,upload=#{upload}
+ 	</if>
+ 	WHERE num=#{num}
+ </update>
+ 
+ <!-- 현재 넘에 해당되는 첨부파일이 있는지 확인 -->
+ <select id="getFile" parameterType="int" resultType="string">
+ 	SELECT upload
+ 	FROM board
+ 	WHERE num=#{num}
+ </select>
+ 
+ <!-- 삭제 1 -> boardDaoImp -->
+ <delete id="delete" parameterType="int">
+ 	DELETE FROM board
+ 	WHERE num=#{num}
+ </delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,11 @@
+
+#server
+server.port=8090
+
+#서버를 재시작
+spring.devtools.livereload.enabled=true
+spring.devtools.remote.restart.enabled=true
+
+#mybatis
+#맵핑용 클래스가 위치한 경
+mybatis.type-aliases-package=com.example.demo.dto

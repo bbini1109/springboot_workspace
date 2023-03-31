@@ -1,0 +1,11 @@
+package com.example.demo.dao;
+
+import java.util.List;
+
+import com.example.demo.dto.TodoDTO;
+
+public interface TodoDAO {
+	
+	public List<TodoDTO> getTodoList() throws Exception;
+
+}

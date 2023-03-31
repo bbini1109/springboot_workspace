@@ -1,0 +1,33 @@
+package com.example.demo.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.dto.TodoDTO;
+import com.example.demo.service.TodoService;
+
+@RestController
+//@Controller
+public class TodoController {
+	
+	//service라고 선언해 놓은 빈을 자동으로 연결 
+	@Autowired
+	private TodoService todoService;
+	
+	public TodoController() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	//http://localhost:8090/todo/all
+	//@ResponseBody
+	@GetMapping("/todo/all")
+	public List<TodoDTO> getList() throws Exception{
+		return todoService.search();
+	}
+
+}

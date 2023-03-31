@@ -1,0 +1,12 @@
+package com.example.demo;
+
+import org.springframework.stereotype.Controller;
+
+public class Democontroller {
+	
+	@Controller
+	public String home() {
+		System.out.println("Hello Boot!!");
+	}
+
+}

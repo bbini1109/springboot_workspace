@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;springboot02_backend_todolist/src/main/resources/mapper/boardMapper.xml&apos; to &apos;todoMapper.xml&apos;" description="Rename resource &apos;boardMapper.xml&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/resources/mapper/boardMapper.xml" name="todoMapper.xml" stamp="1680226388397" updateReferences="true"/>
+</session>
