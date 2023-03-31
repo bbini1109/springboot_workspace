@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+				<!--Dao 연결 전체 경로-->
+<mapper namespace="com.example.demo.dao.TodoDAO"> 
+	
+	 <select id="getTodoList" resultType="TodoDTO">
+		 SELECT * FROM todolist
+	 </select>
+	 
+	 			<!--dao 메소드 호출명-->
+	 <insert id="insertTodoList" parameterType="TodoDTO">
+		 INSERT INTO todolist(id,todoname)
+		 VALUES(todo_id_seq.nextval, #{todoname})
+	 </insert>
+	 
+	 			<!--id값으로 가져와야 함-->
+	 <update id="updateTodolist" parameterType="TodoDTO">
+		 UPDATE todolist
+		 SET completed = #{completed}
+		 WHERE id=#{id}
+	 </update>
+ 
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

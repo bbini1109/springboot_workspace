@@ -15,7 +15,6 @@ INDEX VERSION 1.132+/Users/bbini/springboot_workspace/.metadata/.plugins/org.ecl
 2113150063.index
 1486900291.index
 3783159649.index
-2983006122.index
 4108519776.index
 4168062579.index
 3162930809.index

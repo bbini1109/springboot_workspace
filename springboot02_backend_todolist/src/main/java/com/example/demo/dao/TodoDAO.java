@@ -14,5 +14,8 @@ import com.example.demo.dto.TodoDTO;
 public interface TodoDAO {
 	
 	public List<TodoDTO> getTodoList() throws Exception;
+	public int insertTodoList(TodoDTO dto) throws Exception;
+	public int updateTodoList(TodoDTO dto) throws Exception;
+	public int deleteTodoList(int id) throws Exception;
 
 }

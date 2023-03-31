@@ -25,4 +25,51 @@ public class TodoServiceImp implements TodoService {
 		
 		return todoDAO.getTodoList();
 	}
+
+	@Override
+	public int insert(TodoDTO dto) throws Exception {
+		
+		return todoDAO.insertTodoList(dto);
+	}
+
+	@Override
+	public int update(TodoDTO dto) throws Exception {
+		
+		return todoDAO.updateTodoList(dto);
+	}
+
+	@Override
+	public int delete(int id) throws Exception {
+		
+		return todoDAO.deleteTodoList(id);
+	}
+	
 }
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

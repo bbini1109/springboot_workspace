@@ -1,0 +1,121 @@
+package com.example.demo.controller;
+
+
+import java.nio.charset.Charset;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.dto.TodoDTO;
+import com.example.demo.service.TodoService;
+
+//프론트에서 어떠한 주소든, 포트 번호 요청이 들어오든 응답을 해주겠다고 허용해주는 어노테이션 
+@CrossOrigin
+//front-end를 react로 사용할 거라 json으로 내보내줘야해서
+@RestController //@Controller + @ResponseBody 라서 이거 하나로 대체 가능함
+//@Controller
+public class TodoController {
+
+   @Autowired // 자동적으로 연결해줌
+   private TodoService todoService;
+   
+   public TodoController() {
+      
+   }
+   
+   //http://localhost:8090/todo/all
+   //@ResponseBody
+   @GetMapping("/todo/all")
+   public List<TodoDTO> getList() throws Exception{
+      return todoService.search();
+   }
+   
+   //무조건 post 방식으로 해주어야한다.
+   //http://localhost:8090/todo
+   @PostMapping("/todo")
+   public ResponseEntity<Object> postTodo(@RequestBody TodoDTO dto) throws Exception{
+      int chk = todoService.insert(dto);
+      
+      
+      HashMap<String, String> map = new HashMap<>();
+      map.put("createDate", new Date().toString());
+      map.put("message", "insert OK");
+      map.put("cnt", String.valueOf(chk));
+      
+      HttpHeaders header = new HttpHeaders();
+      header.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+      
+      if(chk>=1) {
+        //return new ResponseEntity<>(HttpStatus.OK); //<> 안의 타입이 감싸고 있는 큰 부분(Object)과 같으면 생략가능 
+    	//return new ResponseEntity<Object>(map, HttpStatus.OK);  // 값과 상태를 같이 보내
+    	//return new ResponseEntity<Object>(header,HttpStatus.OK);
+    	  return new ResponseEntity<Object>(map, header,HttpStatus.OK);
+      }else {
+         return new ResponseEntity<Object>(HttpStatus.NOT_ACCEPTABLE);
+      }
+      
+   }
+   
+   
+   // http://localhost:8090/todo/id/completed
+   // http://localhost:8090/todo/1/0
+   @PutMapping("/todo/{id}/{completed}")
+   public ResponseEntity<Object> putTodo(@PathVariable("id") int id,
+		   								 @PathVariable("completed") int completed) throws Exception{
+	   TodoDTO dto = new TodoDTO();
+	   dto.setId(id);
+	   dto.setCompleted(completed==0 ? 1 : 0);
+	   todoService.update(dto);
+	   
+	   return new ResponseEntity<Object>(HttpStatus.OK);
+	   //postman -> put 먼저 하고, get (http://localhost:8090/todo/all)하면 가져옴 
+   }
+   
+   // http://localhost:8090/todo/1
+   @DeleteMapping("/todo/{id}")
+   public ResponseEntity<Object> deleteTodo(@PathVariable("id")int id) throws Exception{
+	   
+	   todoService.delete(id);
+	   return new ResponseEntity<Object>(HttpStatus.OK);
+   }
+   
+   
+   
+   
+   
+   
+   
+   
+   
+}//end class
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
