@@ -18,7 +18,6 @@ public interface BoardDAO {
 	public BoardDTO content(int num);
 	public void reStepCount(BoardDTO dto);
 	public void save(BoardDTO dto);
-	
 	public void update(BoardDTO dto);
 	public void delete(int num);
 	public String getFile(int num);

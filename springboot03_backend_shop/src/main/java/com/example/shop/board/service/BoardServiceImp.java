@@ -51,10 +51,10 @@ public class BoardServiceImp implements BoardService{
 		return boardDao.content(num);
 }
 
-	@Override
-	public BoardDTO updateSelectProcess(int num) {		
-		return boardDao.content(num);
-}
+//	@Override
+//	public BoardDTO updateSelectProcess(int num) {		
+//		return boardDao.content(num);
+//}
 
 	@Override
 	public void updateProcess(BoardDTO dto, String urlpath) {

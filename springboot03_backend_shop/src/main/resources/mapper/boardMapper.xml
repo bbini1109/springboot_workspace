@@ -5,6 +5,7 @@
 
 
 <mapper namespace="com.example.shop.board.dao.BoardDAO"> 
+	
  <select id="count" resultType="int">
  	<!-- id 값을 count를 호출해주는 Dao 메소드와 이름을 같게 해줘야 작업이 편함 -->
  	SELECT count(*) FROM board <!-- 현재 테이블에 저장되어 있는 전체 레코드 수 리턴 -->
@@ -55,14 +56,16 @@
 </insert>
 
  
- <!-- 조회수 증가 
+  
  <update id="readCount" parameterType="int">
 	UPDATE board
 	SET readCount = readCount + 1
 	WHERE num=#{num}
- </update>
+ </update> 
 
-  아래 content 쿼리문의 결과값을 받아서 처리 
+
+
+  <!-- 아래 content 쿼리문의 결과값을 받아서 처리 
  <resultMap type="board.dto.BoardDTO" id="contentSelect" autoMapping="true">
 	<association property="membersDTO" javaType="members.dto.MembersDTO">
 		<result column="memberName" property="memberName"/>
@@ -76,16 +79,24 @@
 	WHERE b.memberEmail = m.memberEmail(+)  memberEmail 값이 없어도 가져옴 
     AND num=#{num}                 	
  </select>
+ -->
  
-  re_step 값 증가 
- <update id="reStepCount" parameterType="board.dto.BoardDTO">
+  <select id="content" parameterType="int" resultType="BoardDTO">
+	SELECT b.*
+	FROM board b
+	WHERE num=#{num}                 	
+ </select>
+ 
+
+  
+ <update id="reStepCount" parameterType="BoardDTO">
  	UPDATE board
- 	SET re_step = re_step + 1  '=' 할당 
- 	WHERE ref=#{ref} AND re_step > #{re_step}  '=' 비교 
+ 	SET re_step = re_step + 1  <!--'=' 할당 -->
+ 	WHERE ref=#{ref} AND re_step > #{re_step}  <!--'=' 비교 -->
  </update>
 
-  글 수정 
- <update id="update" parameterType="board.dto.BoardDTO">
+  
+ <update id="update" parameterType="BoardDTO">
  	UPDATE board
  	SET subject=#{subject}, content=#{content}
  	<if test="upload!=null">
@@ -94,18 +105,18 @@
  	WHERE num=#{num}
  </update>
  
-  현재 넘에 해당되는 첨부파일이 있는지 확인 
+ 
  <select id="getFile" parameterType="int" resultType="string">
  	SELECT upload
  	FROM board
  	WHERE num=#{num}
  </select>
  
-  삭제 1 -> boardDaoImp 
+  
  <delete id="delete" parameterType="int">
  	DELETE FROM board
  	WHERE num=#{num}
- </delete> -->
+ </delete> 
  
 </mapper>
 
